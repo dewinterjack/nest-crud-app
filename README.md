@@ -22,13 +22,28 @@ $ docker compose up
 
 ## Compile and run the project
 
+You will need to change the `DATABSE_HOST` env var to `DATABASE_HOST=localhost`
+
 ```bash
-# development
-$ pnpm run start
+# run database with docker
+$ docker compose up -d postgres adminer
 
-# watch mode
+# run migrations
+$ pnpm migrations:run
+
+# start the app
 $ pnpm run start:dev
+```
 
-# production mode
-$ pnpm run start:prod
+## Database
+
+```bash
+# generate a migration
+$ pnpm migration:generate src/database/migrations/newMigration --pretty=true
+
+# create a blank migration
+$ pnpm migration:create src/database/migrations/newMigration
+
+# run migrations
+$ pnpm migration:run
 ```
