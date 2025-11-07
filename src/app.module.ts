@@ -23,7 +23,7 @@ import { EnvConfig, envSchema } from './config/env.schema';
         password: configService.get('PG_PASSWORD'),
         database: configService.get('PG_DB'),
         entities: [__dirname + '/**/*.entity{.ts,.js}'],
-        synchronize: true,
+        synchronize: configService.get('NODE_ENV') === 'development',
       }),
       inject: [ConfigService],
     }),
