@@ -10,6 +10,8 @@ $ pnpm install
 
 ## Docker
 
+You will need to change the `DATABSE_HOST` env var to `DATABASE_HOST=postgres`
+
 ```bash
 # build the nest app
 $ docker compose build
@@ -20,28 +22,28 @@ $ docker compose up
 
 ## Compile and run the project
 
-If you are not using Docker, you will need to set the environment variables in the .env file.
+You will need to change the `DATABSE_HOST` env var to `DATABASE_HOST=localhost`
 
 ```bash
-# development
-$ pnpm run start
+# run database with docker
+$ docker compose up -d postgres adminer
 
-# watch mode
+# run migrations
+$ pnpm migrations:run
+
+# start the app
 $ pnpm run start:dev
-
-# production mode
-$ pnpm run start:prod
 ```
 
-## Run tests
+## Database
 
 ```bash
-# unit tests
-$ pnpm run test
+# generate a migration
+$ pnpm migration:generate src/database/migrations/newMigration --pretty=true
 
-# e2e tests
-$ pnpm run test:e2e
+# create a blank migration
+$ pnpm migration:create src/database/migrations/newMigration
 
-# test coverage
-$ pnpm run test:cov
+# run migrations
+$ pnpm migration:run
 ```

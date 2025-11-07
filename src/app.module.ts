@@ -1,29 +1,25 @@
 import { Module } from '@nestjs/common';
 import { UsersModule } from './users/users.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { ConfigModule, ConfigService } from '@nestjs/config';
-import { EnvConfig, envSchema } from './config/env.schema';
+import { ConfigModule } from '@nestjs/config';
+import databaseConfig from './database/config/database.config';
+import appConfig from './config/app.config';
+import { DataSource, DataSourceOptions } from 'typeorm';
+import { TypeOrmConfigService } from './database/typeorm-config.service';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      validate: (config) => envSchema.parse(config),
+      load: [databaseConfig, appConfig],
+      envFilePath: '.env',
     }),
     UsersModule,
     TypeOrmModule.forRootAsync({
-      imports: [ConfigModule],
-      useFactory: (configService: ConfigService<EnvConfig>) => ({
-        type: 'postgres',
-        host: configService.get('PG_HOST'),
-        port: configService.get('PG_PORT'),
-        username: configService.get('PG_USER'),
-        password: configService.get('PG_PASSWORD'),
-        database: configService.get('PG_DB'),
-        entities: [__dirname + '/**/*.entity{.ts,.js}'],
-        synchronize: configService.get('NODE_ENV') === 'development',
-      }),
-      inject: [ConfigService],
+      useClass: TypeOrmConfigService,
+      dataSourceFactory: async (options: DataSourceOptions) => {
+        return new DataSource(options).initialize();
+      },
     }),
   ],
 })
