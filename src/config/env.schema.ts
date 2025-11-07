@@ -5,7 +5,7 @@ export const envSchema = z.object({
   PG_HOST: z.string().min(1),
   PG_PORT: z.coerce.number().int().positive().default(5432),
   PG_USER: z.string().min(1),
-  PG_PASSWORD: z.string().min(1),
+  PG_PASSWORD: z.string(),
   PG_DB: z.string().min(1),
 
   // Server configuration

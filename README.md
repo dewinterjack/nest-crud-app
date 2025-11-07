@@ -20,6 +20,8 @@ $ docker compose up
 
 ## Compile and run the project
 
+If you are not using Docker, you will need to set the environment variables in the .env file.
+
 ```bash
 # development
 $ pnpm run start
